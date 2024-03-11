@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoListApi.Data;
 
@@ -11,9 +12,11 @@ using ToDoListApi.Data;
 namespace ToDoListApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311093823_idenity")]
+    partial class idenity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,20 +49,6 @@ namespace ToDoListApi.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a76cd1a1-da8d-4426-b86a-513521883864",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "3860fd48-7bea-43f2-8213-0216df4165c3",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -329,7 +318,7 @@ namespace ToDoListApi.Migrations
                         {
                             Id = 1,
                             CategoryId = 2,
-                            DueDate = new DateTime(2024, 3, 11, 14, 54, 51, 483, DateTimeKind.Local).AddTicks(9420),
+                            DueDate = new DateTime(2024, 3, 11, 12, 38, 22, 894, DateTimeKind.Local).AddTicks(8840),
                             StatusId = 1,
                             description = "Do the dishes"
                         },
@@ -337,7 +326,7 @@ namespace ToDoListApi.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            DueDate = new DateTime(2024, 3, 11, 14, 54, 51, 483, DateTimeKind.Local).AddTicks(9460),
+                            DueDate = new DateTime(2024, 3, 11, 12, 38, 22, 894, DateTimeKind.Local).AddTicks(8870),
                             StatusId = 1,
                             description = "Finish the report"
                         });
