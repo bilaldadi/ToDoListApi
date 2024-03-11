@@ -8,6 +8,7 @@ using ToDoListApi.Data;
 using ToDoListApi.Interfaces;
 using ToDoListApi.Models;
 using ToDoListApi.Repository;
+using ToDoListApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,7 @@ builder.Services.AddAuthentication(options => {
 
 builder.Services.AddScoped<IToDoRepository, TodoRepository>();
 builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
