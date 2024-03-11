@@ -15,12 +15,43 @@ namespace ToDoListApi.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+        private readonly SignInManager<AppUser> _signInManager;
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signingManager)
         
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signInManager = signingManager;
 
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LogingDto logingDto)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByNameAsync(logingDto.Username.ToLower());
+
+            if(user == null)
+            {
+                return Unauthorized("Invalid Email and/or Password");
+            }
+            var result = await _signInManager.CheckPasswordSignInAsync(user, logingDto.Password, false);
+            if(!result.Succeeded)
+            {
+                return Unauthorized("Invalid UserName and/or Password");
+            }
+            return Ok(
+                new NewUserDto
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                Token = _tokenService.createToken(user)
+            });
+            
         }   
 
         [HttpPost("register")]
