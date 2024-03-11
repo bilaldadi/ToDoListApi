@@ -28,29 +28,35 @@ namespace ToDoListApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LogingDto logingDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            try{
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var user = await _userManager.FindByNameAsync(logingDto.Username.ToLower());
+                var user = await _userManager.FindByNameAsync(logingDto.Username.ToLower());
 
-            if(user == null)
-            {
-                return Unauthorized("Invalid Email and/or Password");
+                if(user == null)
+                {
+                    return Unauthorized("Invalid Email and/or Password");
+                }
+                var result = await _signInManager.CheckPasswordSignInAsync(user, logingDto.Password, false);
+                if(!result.Succeeded)
+                {
+                    return Unauthorized("Invalid UserName and/or Password");
+                }
+                return Ok(
+                    new NewUserDto
+                {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    Token = _tokenService.createToken(user)
+                });
             }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, logingDto.Password, false);
-            if(!result.Succeeded)
+            catch(Exception ex)
             {
-                return Unauthorized("Invalid UserName and/or Password");
+                return StatusCode(500, ex);
             }
-            return Ok(
-                new NewUserDto
-            {
-                Username = user.UserName,
-                Email = user.Email,
-                Token = _tokenService.createToken(user)
-            });
             
         }   
 
