@@ -85,6 +85,7 @@ builder.Services.AddAuthentication(options => {
 
 builder.Services.AddScoped<IToDoRepository, TodoRepository>();
 builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();

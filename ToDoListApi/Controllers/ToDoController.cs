@@ -26,7 +26,7 @@ namespace ToDoListApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<IActionResult> GetAll(){
             var todos = await _todoRepo.GetAllAsync();
             var todoDto = todos.Select(td => td.ToToDoDto());

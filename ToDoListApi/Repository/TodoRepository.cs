@@ -40,7 +40,7 @@ namespace ToDoListApi.Repository
 
         public async Task<List<ToDo>> GetAllAsync()
         {
-           return await _context.todos.Include( c=> c.Category ).ToListAsync();
+           return await _context.todos.Include( c=> c.Category).Include(s=> s.Status).ToListAsync();
         }
 
         public async Task<ToDo?> GetByIdAsync(int id)
