@@ -28,13 +28,19 @@ namespace ToDoListApi.Controllers
         [HttpGet]
         
         public async Task<IActionResult> GetAll(){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var todos = await _todoRepo.GetAllAsync();
             var todoDto = todos.Select(td => td.ToToDoDto());
             return Ok(todos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var todo = await _todoRepo.GetByIdAsync(id);
             if(todo == null){
                 return NotFound();
@@ -44,14 +50,20 @@ namespace ToDoListApi.Controllers
 
         [HttpPost]
         public async  Task<IActionResult> Create([FromBody] CreateToDoDto createToDoDto){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var todo =  createToDoDto.ToToDoFromCreateDto();
             await _todoRepo.CreateAsync(todo);
             return CreatedAtAction(nameof(GetById), new {id = todo.Id}, todo.ToToDoDto());
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id ,[FromBody] UpdateToDoDto updateToDoDto){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var todo = await _todoRepo.UpdateAsync(id,updateToDoDto);
             
             if(todo == null){
@@ -62,8 +74,11 @@ namespace ToDoListApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async  Task<IActionResult> Delete([FromRoute] int id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
             var todo = await _todoRepo.DeleteAsync(id);
             if(todo == null){
                 return NotFound();

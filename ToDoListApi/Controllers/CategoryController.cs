@@ -25,14 +25,22 @@ namespace ToDoListApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var categories = await _categoryRepo.GetAllAsync();
             var categoryDto = categories.Select(s=>s.ToCategoryDto());
             return Ok(categoryDto); 
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var category = await _categoryRepo.GetByIdAsync(id);
             if (category == null)
             {
