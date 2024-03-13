@@ -4,23 +4,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ToDoListApi.Migrations
 {
     /// <inheritdoc />
-    public partial class idenity : Migration
+    public partial class OneToMany : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "categories",
-                type: "longtext",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "longtext")
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -73,6 +68,36 @@ namespace ToDoListApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_categories", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "statuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_statuses", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -203,19 +228,80 @@ namespace ToDoListApi.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "todos",
-                keyColumn: "Id",
-                keyValue: 1,
-                column: "DueDate",
-                value: new DateTime(2024, 3, 11, 12, 38, 22, 894, DateTimeKind.Local).AddTicks(8840));
+            migrationBuilder.CreateTable(
+                name: "todos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DueDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_todos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_todos_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_todos_categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_todos_statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "109a3ed3-4791-4eca-81bc-b7ab5bcd3944", null, "User", "USER" },
+                    { "e330ad32-8a08-4047-b863-87015e96c067", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Work" },
+                    { 2, "Home" },
+                    { 3, "Hobby" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "statuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Open" },
+                    { 2, "Done" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "todos",
-                keyColumn: "Id",
-                keyValue: 2,
-                column: "DueDate",
-                value: new DateTime(2024, 3, 11, 12, 38, 22, 894, DateTimeKind.Local).AddTicks(8870));
+                columns: new[] { "Id", "AppUserId", "CategoryId", "DueDate", "StatusId", "description" },
+                values: new object[,]
+                {
+                    { 1, "1", 2, new DateTime(2024, 3, 13, 0, 50, 37, 384, DateTimeKind.Local).AddTicks(5470), 1, "Do the dishes" },
+                    { 2, "2", 1, new DateTime(2024, 3, 13, 0, 50, 37, 384, DateTimeKind.Local).AddTicks(5500), 1, "Finish the report" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -253,6 +339,21 @@ namespace ToDoListApi.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_todos_AppUserId",
+                table: "todos",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_todos_CategoryId",
+                table: "todos",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_todos_StatusId",
+                table: "todos",
+                column: "StatusId");
         }
 
         /// <inheritdoc />
@@ -274,42 +375,19 @@ namespace ToDoListApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "todos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.UpdateData(
-                table: "categories",
-                keyColumn: "Name",
-                keyValue: null,
-                column: "Name",
-                value: "");
+            migrationBuilder.DropTable(
+                name: "categories");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "categories",
-                type: "longtext",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "longtext",
-                oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.UpdateData(
-                table: "todos",
-                keyColumn: "Id",
-                keyValue: 1,
-                column: "DueDate",
-                value: new DateTime(2024, 3, 9, 21, 8, 19, 556, DateTimeKind.Local).AddTicks(3640));
-
-            migrationBuilder.UpdateData(
-                table: "todos",
-                keyColumn: "Id",
-                keyValue: 2,
-                column: "DueDate",
-                value: new DateTime(2024, 3, 9, 21, 8, 19, 556, DateTimeKind.Local).AddTicks(3670));
+            migrationBuilder.DropTable(
+                name: "statuses");
         }
     }
 }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoListApi.Data;
 using ToDoListApi.Dtos.ToDoDto;
 using ToDoListApi.Interfaces;
 using ToDoListApi.Mappers;
+using ToDoListApi.Models;
 
 namespace ToDoListApi.Controllers
 {
@@ -18,19 +20,30 @@ namespace ToDoListApi.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IToDoRepository _todoRepo;
-        public ToDoController(ApplicationDbContext context , IToDoRepository toDoRepo)
+        private readonly UserManager<AppUser> _userManager;
+        public ToDoController(ApplicationDbContext context , IToDoRepository toDoRepo , UserManager<AppUser> userManager)
         {
             _todoRepo = toDoRepo;
             _context = context;
+            _userManager = userManager;
             
         }
 
         [HttpGet]
+        [Authorize]
         
         public async Task<IActionResult> GetAll(){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+            
+
             var todos = await _todoRepo.GetAllAsync();
             var todoDto = todos.Select(td => td.ToToDoDto());
             return Ok(todos);
@@ -49,13 +62,34 @@ namespace ToDoListApi.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> Create([FromBody] CreateToDoDto createToDoDto){
-            if(!ModelState.IsValid){
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] CreateToDoDto createToDoDto)
+        {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
-            var todo =  createToDoDto.ToToDoFromCreateDto();
+
+            if(!User.Identity.IsAuthenticated){
+                return BadRequest("User not authenticated");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var userid = user.Id;
+            var todo = createToDoDto.ToToDoFromCreateDto(userid);
+
+            if (todo == null)
+            {
+                return BadRequest("Unable to create todo");
+            }
+
             await _todoRepo.CreateAsync(todo);
-            return CreatedAtAction(nameof(GetById), new {id = todo.Id}, todo.ToToDoDto());
+            return CreatedAtAction(nameof(GetById), new { id = todo.Id }, todo.ToToDoDto());
         }
 
         [HttpPut]

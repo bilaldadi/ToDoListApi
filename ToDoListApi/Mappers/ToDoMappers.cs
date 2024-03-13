@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using ToDoListApi.Data;
 using ToDoListApi.Dtos.ToDoDto;
 using ToDoListApi.Models;
@@ -25,14 +26,19 @@ namespace ToDoListApi.Mappers
             };
         }
 
-        public static ToDo ToToDoFromCreateDto(this CreateToDoDto createToDoDto)
+        public static ToDo ToToDoFromCreateDto(this CreateToDoDto createToDoDto , string user )
         {
             return new ToDo
             {
                 description = createToDoDto.Description,
                 DueDate = createToDoDto.DueDate,
                 CategoryId = createToDoDto.CategoryID,
-                StatusId = createToDoDto.StatusID
+                StatusId = createToDoDto.StatusID,
+                AppUserId = user
+                
+                
+                
+                
             };
         }
         

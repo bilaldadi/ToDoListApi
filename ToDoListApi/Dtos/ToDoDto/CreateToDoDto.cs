@@ -12,8 +12,12 @@ namespace ToDoListApi.Dtos.ToDoDto
 
         public DateTime? DueDate { get; set; }
 
-        public required int CategoryID { get; set; }
+        public  int CategoryID { get; set; }
 
-        public required int StatusID { get; set; }
+        public  int StatusID { get; set; }
+
+        
+
+        
     }
 }

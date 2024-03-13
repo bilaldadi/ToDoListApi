@@ -50,13 +50,13 @@ namespace ToDoListApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a76cd1a1-da8d-4426-b86a-513521883864",
+                            Id = "e330ad32-8a08-4047-b863-87015e96c067",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3860fd48-7bea-43f2-8213-0216df4165c3",
+                            Id = "109a3ed3-4791-4eca-81bc-b7ab5bcd3944",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -274,7 +274,6 @@ namespace ToDoListApi.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -302,6 +301,10 @@ namespace ToDoListApi.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -318,6 +321,8 @@ namespace ToDoListApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("StatusId");
@@ -328,16 +333,18 @@ namespace ToDoListApi.Migrations
                         new
                         {
                             Id = 1,
+                            AppUserId = "1",
                             CategoryId = 2,
-                            DueDate = new DateTime(2024, 3, 11, 14, 54, 51, 483, DateTimeKind.Local).AddTicks(9420),
+                            DueDate = new DateTime(2024, 3, 13, 0, 50, 37, 384, DateTimeKind.Local).AddTicks(5470),
                             StatusId = 1,
                             description = "Do the dishes"
                         },
                         new
                         {
                             Id = 2,
+                            AppUserId = "2",
                             CategoryId = 1,
-                            DueDate = new DateTime(2024, 3, 11, 14, 54, 51, 483, DateTimeKind.Local).AddTicks(9460),
+                            DueDate = new DateTime(2024, 3, 13, 0, 50, 37, 384, DateTimeKind.Local).AddTicks(5500),
                             StatusId = 1,
                             description = "Finish the report"
                         });
@@ -396,6 +403,12 @@ namespace ToDoListApi.Migrations
 
             modelBuilder.Entity("ToDoListApi.Models.ToDo", b =>
                 {
+                    b.HasOne("ToDoListApi.Models.AppUser", "User")
+                        .WithMany("ToDos")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ToDoListApi.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -411,6 +424,13 @@ namespace ToDoListApi.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Status");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ToDoListApi.Models.AppUser", b =>
+                {
+                    b.Navigation("ToDos");
                 });
 #pragma warning restore 612, 618
         }

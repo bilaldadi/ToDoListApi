@@ -8,6 +8,6 @@ namespace ToDoListApi.Models
 {
     public class AppUser: IdentityUser
     {
-        
+        public List<ToDo> ToDos { get; set; }
     }
 }

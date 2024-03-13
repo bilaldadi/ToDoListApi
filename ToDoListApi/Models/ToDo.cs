@@ -24,5 +24,10 @@ namespace ToDoListApi.Models
         public Status? Status { get; set; }
 
         public bool Overdue => StatusId == 1 && DueDate < DateTime.Now;
+
+        public string AppUserId { get; set; }
+
+        public AppUser User { get; set; }
+
     }
 }

@@ -32,6 +32,13 @@ namespace ToDoListApi.Data
         {
              base.OnModelCreating(modelBuilder); 
 
+             modelBuilder.Entity<ToDo>()
+             .HasOne<AppUser>(t => t.User)
+             .WithMany(u => u.ToDos)
+             .HasForeignKey(t => t.AppUserId);
+             
+
+
              List<IdentityRole> roles = new List<IdentityRole>
              {
                     new IdentityRole{Name = "Admin", NormalizedName = "ADMIN"},
@@ -51,8 +58,8 @@ namespace ToDoListApi.Data
             );
 
             modelBuilder.Entity<ToDo>().HasData(
-                new ToDo {Id = 1, description = "Do the dishes", DueDate=DateTime.Now , CategoryId = 2, StatusId = 1},
-                new ToDo {Id = 2, description = "Finish the report", DueDate=DateTime.Now, CategoryId = 1, StatusId = 1}
+                new ToDo {Id = 1, description = "Do the dishes", DueDate=DateTime.Now , CategoryId = 2, StatusId = 1 , AppUserId = "1"},
+                new ToDo {Id = 2, description = "Finish the report", DueDate=DateTime.Now, CategoryId = 1, StatusId = 1, AppUserId = "2"}
                 );
 
           
