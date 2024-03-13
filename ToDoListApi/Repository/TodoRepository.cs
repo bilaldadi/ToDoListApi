@@ -48,6 +48,11 @@ namespace ToDoListApi.Repository
             return await _context.todos.Include(c => c.Category).FirstOrDefaultAsync(td => td.Id == id);
         }
 
+        public async Task<IEnumerable<ToDo>> GetToDosForUserAsync(string userId)
+        {
+            return await _context.todos.Where(td=> td.AppUserId == userId).Include( c=> c.Category).Include(s=> s.Status).ToListAsync();
+        }
+
         public async Task<ToDo?> UpdateAsync(int id, UpdateToDoDto toDoDto)
         {
             var todo = await _context.todos.FirstOrDefaultAsync(td => td.Id == id);

@@ -36,17 +36,15 @@ namespace ToDoListApi.Controllers
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return BadRequest("User not found");
             }
             
-
-            var todos = await _todoRepo.GetAllAsync();
+            var todos = await _todoRepo.GetToDosForUserAsync(user.Id);
             var todoDto = todos.Select(td => td.ToToDoDto());
-            return Ok(todos);
+            return Ok(todoDto);
         }
 
         [HttpGet("{id:int}")]

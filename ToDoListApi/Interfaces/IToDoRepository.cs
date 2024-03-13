@@ -9,6 +9,7 @@ namespace ToDoListApi.Interfaces
 {
     public interface IToDoRepository
     {
+        Task<IEnumerable<ToDo>>GetToDosForUserAsync(string userId);
         Task<List<ToDo>> GetAllAsync();
 
         Task<ToDo?> GetByIdAsync(int id);

@@ -21,7 +21,7 @@ namespace ToDoListApi.Mappers
                 CategoryID = toDoModel.CategoryId,
                 Category = toDoModel.Category,
                 StatusID = toDoModel.StatusId,
-                Status = toDoModel.Status
+                Status = toDoModel.Status,
                 
             };
         }
