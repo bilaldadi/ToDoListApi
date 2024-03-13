@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/bilaldadi/Documents/Web Devolopment/ASP/ToDoListApi/ToDoListApi/ToDoListApi.csproj": {}
+    "/Users/bilaldadi/Documents/Web Devolopment/ASP/Full-Stack/Backend/ToDoListApi/ToDoListApi/ToDoListApi.csproj": {}
   },
   "projects": {
-    "/Users/bilaldadi/Documents/Web Devolopment/ASP/ToDoListApi/ToDoListApi/ToDoListApi.csproj": {
+    "/Users/bilaldadi/Documents/Web Devolopment/ASP/Full-Stack/Backend/ToDoListApi/ToDoListApi/ToDoListApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/bilaldadi/Documents/Web Devolopment/ASP/ToDoListApi/ToDoListApi/ToDoListApi.csproj",
+        "projectUniqueName": "/Users/bilaldadi/Documents/Web Devolopment/ASP/Full-Stack/Backend/ToDoListApi/ToDoListApi/ToDoListApi.csproj",
         "projectName": "ToDoListApi",
-        "projectPath": "/Users/bilaldadi/Documents/Web Devolopment/ASP/ToDoListApi/ToDoListApi/ToDoListApi.csproj",
+        "projectPath": "/Users/bilaldadi/Documents/Web Devolopment/ASP/Full-Stack/Backend/ToDoListApi/ToDoListApi/ToDoListApi.csproj",
         "packagesPath": "/Users/bilaldadi/.nuget/packages/",
-        "outputPath": "/Users/bilaldadi/Documents/Web Devolopment/ASP/ToDoListApi/ToDoListApi/obj/",
+        "outputPath": "/Users/bilaldadi/Documents/Web Devolopment/ASP/Full-Stack/Backend/ToDoListApi/ToDoListApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/bilaldadi/.nuget/NuGet/NuGet.Config"
